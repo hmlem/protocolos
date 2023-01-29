@@ -1,19 +1,25 @@
-import axios from 'axios';
 import { useEffect, useState } from 'react';
 import YAML from 'yaml'
 import Protocol from '../models/data/protocol.model';
+import FlowChart from '../models/visualization/chart.model';
+import ProtocolService from '../services/ProtocolService';
 
 export function ProtocoloX() {
 
-    const [ protocol, setProtocol ] = useState(new Protocol())
+    const _protocolService : ProtocolService = new ProtocolService()
+
+    const [ protocol, setProtocol ] = useState<Protocol>(new Protocol())
+    const [ flowchart, setFlowchart ] = useState<FlowChart>(new FlowChart)
 
     useEffect(() => {
-        axios.get('/data/protocolos/C.yml')
-        .then( res => { 
-            setProtocol(YAML.parse(res.data))
+        _protocolService.getProtocolById("C").then( res => {
+            setProtocol(YAML.parse(res.data));
         })
-        .catch( err => console.log(err.message) )
     }, [])
+
+    useEffect(()=>{
+        setFlowchart({...flowchart, protocol: protocol})
+    },[protocol])
 
     return (
     <div className="flex justify-center">
@@ -25,7 +31,7 @@ export function ProtocoloX() {
         
         </svg>
 
-       <div> {JSON.stringify(protocol)} </div>
+       <div> {JSON.stringify(flowchart.protocol)} </div>
 
     </div>
     )
