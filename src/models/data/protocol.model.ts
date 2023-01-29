@@ -9,7 +9,7 @@ export default class Protocol {
     _reference: string
     _actions: Action[] = []
 
-    constructor(id:number, title:string, description: string, author: string, refenrece: string) {
+    constructor(id:number = 0, title:string = '', description: string = '', author: string = '', refenrece: string = '') {
         this._id = id
         this._title = title
         this._description = description 
