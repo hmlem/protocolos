@@ -1,0 +1,27 @@
+# Author: Joao Araujo
+# 4 types for actions: beginning, simple, decision and end.
+
+metadata:
+  id: 1
+  title: "Título do Protocolo"
+  description: "Descrição da utilidade e para quê abrir o protocolo"
+  autor: "Joao"
+actions:
+  - id: "A"
+    description: null
+    reference: null
+    type: beginning 
+    from: null
+    to: B
+  - id: "B" 
+    description: "B"
+    reference: "B"
+    type: simple 
+    from: A
+    to: C
+  - id: "C" 
+    description: "End"
+    reference: null
+    type: end 
+    from: B
+    to: null

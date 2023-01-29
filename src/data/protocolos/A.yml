@@ -1,0 +1,32 @@
+# Author: Filipe
+# Description: Primeiro diagrama, desenvolvido pelo Filipe. Lista as relações separadas.
+#              
+
+metadata:
+    title: "Título do Protocolo"
+    description: "Descrição da utilidade e para quê abrir o protocolo"
+boxes:
+    1:
+        description: "Parada cardiorespiratória"
+        references: "Teste de referência"
+        style: "default"       
+drugs:
+    amiodarona_1:
+        name: "Amiodarona ampola X"
+        concentration: "150mg/mL"
+        volumeMl: "2mL"
+        administration: "Em bólus rápido com push de soro fisiológico"
+        dose:
+            usual: "({{weight}}*20) mg"
+            max: "300mg"
+relationships:
+    - "{{1}} - Sim -> {{2}}"
+    - "{{1}} - Não -> {{3}}"
+    - "{{2}} -> {{5}}"
+styles:
+    default: 
+        - backgroundColor: "#fff"
+        - borderRadius: "5px"
+        - border: "1px solid #ccc"
+        - format: "square|rectangle|circle|hexagon"
+        - fixedWidth: "small|medium|big|64px"
