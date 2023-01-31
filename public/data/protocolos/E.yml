@@ -1,0 +1,23 @@
+# Author: Joao Araujo
+
+id: 1
+metadata:
+  title: "Título do Protocolo"
+  description: "Descrição da utilidade e para quê abrir o protocolo"
+  autor: "Joao"
+actions:
+  - id: 0
+    description: "Inicio"
+    reference: null
+    type: beginning 
+  - id: 1
+    description: "B"
+    reference: "B"
+    type: simple 
+  - id: 2
+    description: "Fim"
+    reference: null
+    type: end
+relationships:
+  - "{{0}} -> 1"
+  - "{{1}} -> 2"
