@@ -31,8 +31,10 @@ export function ProtocoloX() {
     <div className="flex justify-center">
 
         <svg width={750} height={600} className="border-4 border-slate-600">
-            <text x={10} y={20}> {protocol.title} </text>
-            <text x={10} y={100}> {protocol.getNumberOfRows()} </text>
+            <text x={10} y={20}> 
+                {protocol.title} 
+            </text>
+
         </svg>
 
     </div>

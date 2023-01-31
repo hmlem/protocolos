@@ -13,15 +13,13 @@ export default class Protocol {
     constructor() {
     }
 
+    /**
+     * O número de linhas é obitido pela quantidade de parentes únicos nas relações.
+     * Por exemplo: se a Action B, vem de A e vai para C sabemos que há 3 linhas no gráfico.
+     * @returns Número de Linhas de um gráfico de fluxo. 
+     */
     getNumberOfRows() : number {
-        let sponsors: number[] = [];
-        this.actions.forEach(action => {
-            action.relationships.forEach(rel => {
-                if (rel.type == ERelationship.comes ) {
-                   sponsors.push(rel.target) 
-                }
-            });
-        });
+        let sponsors = this.actions.map( action => action.relationships.map( rel => rel.target) ).flat()
         return [...new Set(sponsors)].length
     }
 
