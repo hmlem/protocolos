@@ -1,13 +1,13 @@
 import { ActionType } from "../enums/EActionType"
-import Relation from "./relation.model"
+import Relationship from "./relationship.model"
 
 export default class Action {
 
-    _id: number = -1
-    _description: String = ""
-    _reference: String = ""
-    _type: ActionType = ActionType.end
-    _relations: Relation[] = []
+    id: number = -1
+    description: String = ""
+    reference: String = ""
+    type: ActionType = ActionType.end
+    relationships: Relationship[] = []
 
     constructor(){}
 
