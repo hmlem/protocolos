@@ -42,17 +42,17 @@ export function ProtocoloX() {
         <text x={10} y={40} > Rows: { grid.rows.length } </text>
         {/* Grid */}
         {
-            grid.rows.map( (row,ri) => {
-                return grid.cols.map( (col,ci) => {
+            grid.cols.map( (col,ci) => {
+                return grid.rows.map( (row,ri) => {
                     return (
-                        <g key={`grid-cell-container-coord(${ri},${ci})`}>
-                            <rect key={`(${ri},${ci})`} 
+                        <g key={`grid-cell-container-coord(${ci},${ri})`}>
+                            <rect key={`(${ci},${ri})`} 
                             x={ci*maxBlockWidth} y ={ri*maxBlockHeight} 
                             width={maxBlockWidth} height={maxBlockHeight} 
                             style={{fill:'rgb(100,100,220)', stroke:"rgb(0,0,0)"}}
                             />
-                            <text key={`text-coord(${ri},${ci})`} x={ci*maxBlockWidth + 33} y={ri*maxBlockHeight + 50} > 
-                                {`(${ri},${ci})`} 
+                            <text key={`text-coord(${ci},${ri})`} x={ci*maxBlockWidth + 33} y={ri*maxBlockHeight + 50} > 
+                                {`(${ci},${ri})`} 
                             </text>
                         </g>
                         )
