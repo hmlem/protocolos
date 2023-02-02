@@ -23,4 +23,9 @@ export default class Protocol {
         return [...new Set(sponsors)].length
     }
 
+    // TODO
+    getNumberOfColumns() : number {
+        return 1;
+    }
+
 }

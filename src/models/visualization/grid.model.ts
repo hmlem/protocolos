@@ -1,8 +1,18 @@
 export default class Grid {
 
-    _rows: number = 0
-    _cols: number = 0
+    rows: Array<any> = []
+    cols: Array<any> = []
 
-    constructor(){}
+    constructor(rows: number, columns: number){
+
+        for( let i = 0; i< rows; i++){
+            this.rows.push(0)
+        }
+
+        for( let i = 0; i< columns; i++){
+            this.cols.push(0)
+        }
+
+    }
 
 }
