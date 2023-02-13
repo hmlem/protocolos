@@ -19,5 +19,12 @@ actions:
     reference: null
     type: end
 relationships:
-  - "{{0}} -> 1"
-  - "{{1}} -> 2"
+  - originActionId: 0
+    targetActionId: 1
+    rule: ''
+  - originActionId: 1
+    targetActionId: 2
+    rule: ''
+  - originActionId: 2
+    targetActionId: 3
+    rule: ''

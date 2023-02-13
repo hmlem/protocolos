@@ -1,0 +1,29 @@
+id: 0
+metadata:
+  title: "Protocolo da sede."
+  description: "Protocolo de ação para quando o paciênte estiver com sede."
+  autor: "Joao Araujo"
+  reference: "Não há referência anexada."
+actions:
+  - id: 0
+    description: "Inicio do Protocolo de Ação."
+    reference: null
+    type: beginning 
+  - id: 1
+    description: " Dê um copo com água ao paciente."
+    reference: null
+    type: simple 
+  - id: 2
+    description: "Fim do Protocolo de ação."
+    reference: null
+    type: end
+relationships:
+  - originActionId: 0
+    targetActionId: 1
+    rule: ''
+  - originActionId: 1
+    targetActionId: 2
+    rule: ''
+  - originActionId: 2
+    targetActionId: 3
+    rule: ''
