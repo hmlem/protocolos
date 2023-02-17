@@ -1,17 +1,15 @@
-import { ERelationship } from "../enums/ERelashionshipType"
+import { ActionType } from "../enums/EActionType"
 import Action from "./action.model"
+import Relationship from "./relationship.model"
 
 export default class Protocol {
 
     id?: number
-    title?: string
-    description?:string
-    author?:string
-    reference?: string
-    actions: Action[] = []
+    metadata?: ProtocolMetadata
+    actions?: Action[]
+    relationships?: Relationship[] = []
 
-    constructor() {
-    }
+    constructor() { }
 
     /**
      * O número de linhas é obitido pela quantidade de parentes únicos nas relações.
@@ -19,13 +17,25 @@ export default class Protocol {
      * @returns Número de Linhas de um gráfico de fluxo. 
      */
     getNumberOfRows() : number {
-        let sponsors = this.actions.map( action => action.relationships.map( rel => rel.target) ).flat()
-        return [...new Set(sponsors)].length
+        return 1;
     }
 
-    // TODO
+    /**
+     * //TODO
+     */
     getNumberOfColumns() : number {
         return 1;
     }
 
+    getStartAction(): Action { 
+        return new Action()
+     }
+
+}
+
+class ProtocolMetadata {
+    title?: string
+    description?:string
+    author?:string
+    reference?: string
 }

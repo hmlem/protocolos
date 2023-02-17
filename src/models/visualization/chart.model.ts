@@ -1,4 +1,5 @@
 import Protocol from "../data/protocol.model"
+import Block from "./block.model"
 
 export default class FlowChart {
 
@@ -9,6 +10,8 @@ export default class FlowChart {
     height:number = 0
 
     protocol: Protocol | null = null
+
+    blocks: Block[] = []
 
     constructor(){}
 

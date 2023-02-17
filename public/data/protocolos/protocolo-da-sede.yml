@@ -24,6 +24,3 @@ relationships:
   - originActionId: 1
     targetActionId: 2
     rule: ''
-  - originActionId: 2
-    targetActionId: 3
-    rule: ''

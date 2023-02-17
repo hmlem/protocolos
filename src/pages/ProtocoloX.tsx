@@ -1,6 +1,11 @@
 import { useEffect, useState } from 'react';
 import YAML from 'yaml'
+import Action from '../models/data/action.model';
 import Protocol from '../models/data/protocol.model';
+import Relationship from '../models/data/relationship.model';
+import { ActionType } from '../models/enums/EActionType';
+import Block from '../models/visualization/block.model';
+import FlowChart from '../models/visualization/chart.model';
 import Grid from '../models/visualization/grid.model';
 import ProtocolService from '../services/ProtocolService';
 
@@ -16,7 +21,7 @@ export function ProtocoloX() {
      * para uma variável do tipo Protocol. 
      */
     useEffect(() => {
-        _protocolService.getProtocolById("C").then( res => {
+        _protocolService.getProtocolByFileName("protocolo-da-sede").then( res => {
             let newProtocol: Protocol = Object.assign(new Protocol(), YAML.parse(res.data) )
             setProtocol(newProtocol)
         })
@@ -24,8 +29,18 @@ export function ProtocoloX() {
 
     /** Executado sempre que o protocolo é atualizado. */
     useEffect(()=>{
+        
         window.localStorage.setItem('protocol', YAML.stringify(protocol));
-        setGrid(new Grid(protocol.getNumberOfRows(), protocol.getNumberOfColumns()))
+
+        console.log('-----Protocol-----')
+        console.log(protocol)
+        console.log('------------------')
+
+        let blocks : Block[] = getBlocksFromProtocol( protocol );
+
+        console.log('---Blocos---')
+        console.log(blocks)
+        console.log('------------')
 
     },[protocol])
 
@@ -34,7 +49,6 @@ export function ProtocoloX() {
 
     return (
     <div className="flex justify-center">
-
 
         <svg width={750} height={600} className="border-4 border-slate-600">
         {/* Metadata */}
@@ -45,7 +59,7 @@ export function ProtocoloX() {
             grid.cols.map( (col,ci) => {
                 return grid.rows.map( (row,ri) => {
                     return (
-                        <g key={`grid-cell-container-coord(${ci},${ri})`}>
+                        <g key={`grid-cell-container-coord(${ci},${ri})`} opacity="0.5">
                             <rect key={`(${ci},${ri})`} 
                             x={ci*maxBlockWidth} y ={ri*maxBlockHeight} 
                             width={maxBlockWidth} height={maxBlockHeight} 
@@ -55,13 +69,77 @@ export function ProtocoloX() {
                                 {`(${ci},${ri})`} 
                             </text>
                         </g>
-                        )
+                    )
                 })
             })
         }
-        
         </svg>
 
     </div>
     )
+}
+
+/**
+ * Retorna o conjunto de blocos com coordenadas da GRID.
+ * A função assume que há um e apenas um bloco com tipo
+ * EActionType.start
+ * @param Blocks 
+ * @type Block[]
+ * @returns  
+ */
+function delegateBlocksOnGrid(blocks: Block[]) : Block[] {
+    // console.log(blocks[0].actionType == 'beginning')
+
+    // blocks.filter(block => block.actionType == ActionType.start)[0].gridX = 0;
+    // blocks.filter(block => block.actionType == ActionType.start)[0].gridY = 0;
+
+    return [];
+}
+
+function getActionTypeFromString( value: any ) {
+    switch ( value ) {
+        case 'beginning': return ActionType.start
+        case 'simple': return ActionType.simple
+        case 'decision': return ActionType.decision
+        case 'end': return ActionType.end
+    }
+}
+
+function getBlocksFromProtocol( protocol: Protocol ){
+    
+    let blocks : Block[] = []
+    
+    let startAction: Action = Object.assign(new Action(), protocol.actions?.filter( a => a.id == 0 )[0]!);// TODO: necessita que o primeiro, inicio do protocolo, seja com id 0. talvez mudar depois.
+
+        // Para cada relação, o algoritimo vai pegar a origem e o destino e
+        // vai transformar em blocos. Se um deles for origem, vai receber 0,0
+
+        protocol.relationships?.forEach( rel => {
+
+            // Verifica se já não há bloco com o id da ação de origem da relação.
+            if ( blocks.find( block => block.id == rel.originActionId) == undefined ) {
+
+                if( rel.originActionId == startAction.id ){
+                    let beginningBlock: Block = Object.assign(new Block(), { id: rel.originActionId, gridX: 0, gridY: 0, action: startAction } )
+                    blocks.push(beginningBlock)
+                }
+
+            }
+
+            // verifica se o bloco do destino da relação já não está no array de blocos
+            if( blocks.filter( b => b.id == rel.targetActionId ).length == 0 ) {
+
+                let originBlock: Block = blocks.find( block => block.id == rel.originActionId )!;
+                let targetAction: Action = protocol.actions!.find( action => action.id == rel.targetActionId )!;
+
+                let newBlockGridX = originBlock.gridX + ( originBlock.action?.type != 'decision'  ? 0 : 1 ); //TODO: "sempre indo para direita no gráfico"
+                let newBlockGridY = originBlock.gridY + 1;
+
+                let newBlock: Block = Object.assign( new Block(), { id: rel.targetActionId, gridX: newBlockGridX, gridY: newBlockGridY,action: targetAction });
+                blocks.push(newBlock);
+            }
+           
+        });
+
+        return blocks;
 }

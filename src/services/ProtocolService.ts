@@ -6,4 +6,6 @@ export default class ProtocolService {
 
     getProtocolById = (id: string) => axios.get(`/data/protocolos/${id}.yml`);
 
+    getProtocolByFileName = (name: string) => axios.get(`/data/protocolos/${name}.yml`);
+
 }
