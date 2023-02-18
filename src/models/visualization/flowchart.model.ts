@@ -4,7 +4,7 @@ import Grid from "./grid.model"
 
 export default class FlowChart {
 
-    Grid?: Grid
+    grid: Grid = new Grid(0,0)
 
     width:number = 0
     height:number = 0

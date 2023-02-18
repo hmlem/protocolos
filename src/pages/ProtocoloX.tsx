@@ -2,7 +2,6 @@ import { useEffect, useState } from 'react';
 import YAML from 'yaml'
 import Action from '../models/data/action.model';
 import Protocol from '../models/data/protocol.model';
-import Relationship from '../models/data/relationship.model';
 import { ActionType } from '../models/enums/EActionType';
 import Block from '../models/visualization/block.model';
 import FlowChart from '../models/visualization/flowchart.model';
@@ -14,7 +13,7 @@ export function ProtocoloX() {
     const _protocolService : ProtocolService = new ProtocolService()
 
     const [ protocol, setProtocol ] = useState<Protocol>(new Protocol())
-    const [ grid, setGrid ] = useState<Grid>(new Grid(0,0))
+    const [ flowchart, setFlowchart ] = useState<FlowChart>(new FlowChart())
 
     /** Traz o protocolo de acordo com o Id, o converte para um objeto
      * genérico e então atualiza o estado da variável global do protocolo
@@ -32,51 +31,46 @@ export function ProtocoloX() {
         
         window.localStorage.setItem('protocol', YAML.stringify(protocol));
 
-        console.log('-----Protocol-----')
-        console.log(protocol)
-        console.log('------------------')
+        // console.log('-----Protocol-----')
+        // console.log(protocol)
+        // console.log('------------------')
 
         let blocks : Block[] = getBlocksFromProtocol( protocol );
 
-        console.log('---Blocos---')
-        console.log(blocks)
-        console.log('------------')
+        // console.log('---Blocos---')
+        // console.log(blocks)
+        // console.log('------------')
 
         let flowchart : FlowChart = Object.assign( new FlowChart(), { protocol: protocol })
 
-        console.log(flowchart.getNumberOfRows())
-        console.log(flowchart.getNumberOfColumns())
+        let grid: Grid = new Grid(flowchart.getNumberOfRows(), flowchart.getNumberOfColumns())
+        flowchart = Object.assign( new FlowChart(), { protocol: protocol, blocks: blocks, grid: grid })
+
+        if( protocol != null && blocks.length > 0 ) setFlowchart( flowchart )
 
     },[protocol])
 
-    let maxBlockWidth = 100;
-    let maxBlockHeight = 100;
+    useEffect( ()=>{
+        
+        console.log(flowchart)
+
+    },[ flowchart])
 
     return (
     <div className="flex justify-center">
 
+        {/* Draw Grid */}
         <svg width={750} height={600} className="border-4 border-slate-600">
         {/* Metadata */}
-        <text x={10} y={20} > Cols: { grid.cols.length } </text>
-        <text x={10} y={40} > Rows: { grid.rows.length } </text>
+        <text x={10} y={20} > Cols: { flowchart.grid.cols.length } </text>
+        <text x={10} y={40} > Rows: { flowchart.grid.rows.length } </text>
         {/* Grid */}
         {
-            grid.cols.map( (col,ci) => {
-                return grid.rows.map( (row,ri) => {
-                    return (
-                        <g key={`grid-cell-container-coord(${ci},${ri})`} opacity="0.5">
-                            <rect key={`(${ci},${ri})`} 
-                            x={ci*maxBlockWidth} y ={ri*maxBlockHeight} 
-                            width={maxBlockWidth} height={maxBlockHeight} 
-                            style={{fill:'rgb(100,100,220)', stroke:"rgb(0,0,0)"}}
-                            />
-                            <text key={`text-coord(${ci},${ri})`} x={ci*maxBlockWidth + 33} y={ri*maxBlockHeight + 50} > 
-                                {`(${ci},${ri})`} 
-                            </text>
-                        </g>
-                    )
-                })
-            })
+            drawGrid(flowchart)
+        }
+        {/* Flowchart */}
+        {
+            drawflowchart(flowchart)
         }
         </svg>
 
@@ -147,4 +141,31 @@ function getBlocksFromProtocol( protocol: Protocol ){
         });
 
         return blocks;
+}
+
+function drawGrid( flowchart: FlowChart){
+
+    let maxBlockWidth = 100;
+    let maxBlockHeight = 100;
+
+    return flowchart.grid.cols.map( (col,ci) => {
+        return flowchart.grid.rows.map( (row,ri) => {
+            return (
+                <g key={`grid-cell-container-coord(${ci},${ri})`} opacity="0.5">
+                    <rect key={`(${ci},${ri})`} 
+                    x={ci*maxBlockWidth} y ={ri*maxBlockHeight} 
+                    width={maxBlockWidth} height={maxBlockHeight} 
+                    style={{fill:'rgb(100,100,220)', stroke:"rgb(0,0,0)"}}
+                    />
+                    <text key={`text-coord(${ci},${ri})`} x={ci*maxBlockWidth + 33} y={ri*maxBlockHeight + 50} > 
+                        {`(${ci},${ri})`} 
+                    </text>
+                </g>
+            )
+        })
+    })
+}
+
+function drawflowchart( flowchart: FlowChart ) {
+    return (<div></div>)
 }
