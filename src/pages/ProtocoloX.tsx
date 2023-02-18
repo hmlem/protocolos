@@ -5,7 +5,7 @@ import Protocol from '../models/data/protocol.model';
 import Relationship from '../models/data/relationship.model';
 import { ActionType } from '../models/enums/EActionType';
 import Block from '../models/visualization/block.model';
-import FlowChart from '../models/visualization/chart.model';
+import FlowChart from '../models/visualization/flowchart.model';
 import Grid from '../models/visualization/grid.model';
 import ProtocolService from '../services/ProtocolService';
 
@@ -41,6 +41,11 @@ export function ProtocoloX() {
         console.log('---Blocos---')
         console.log(blocks)
         console.log('------------')
+
+        let flowchart : FlowChart = Object.assign( new FlowChart(), { protocol: protocol })
+
+        console.log(flowchart.getNumberOfRows())
+        console.log(flowchart.getNumberOfColumns())
 
     },[protocol])
 
