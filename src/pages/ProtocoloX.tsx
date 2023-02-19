@@ -6,6 +6,7 @@ import { ActionType } from '../models/enums/EActionType';
 import Block from '../models/visualization/block.model';
 import FlowChart from '../models/visualization/flowchart.model';
 import Grid from '../models/visualization/grid.model';
+import { Point } from '../models/visualization/point.model';
 import ProtocolService from '../services/ProtocolService';
 
 export function ProtocoloX() {
@@ -20,7 +21,7 @@ export function ProtocoloX() {
      * para uma variável do tipo Protocol. 
      */
     useEffect(() => {
-        _protocolService.getProtocolByFileName("protocolo-da-sede").then( res => {
+        _protocolService.getProtocolByFileName("protocolo-simples").then( res => {
             let newProtocol: Protocol = Object.assign(new Protocol(), YAML.parse(res.data) )
             setProtocol(newProtocol)
         })
@@ -51,9 +52,7 @@ export function ProtocoloX() {
     },[protocol])
 
     useEffect( ()=>{
-        
-        console.log(flowchart)
-
+        console.log(flowchart.blocks)
     },[ flowchart])
 
     return (
@@ -70,7 +69,7 @@ export function ProtocoloX() {
         }
         {/* Flowchart */}
         {
-            drawflowchart(flowchart)
+            // drawflowchart(flowchart)
         }
         </svg>
 
@@ -119,7 +118,7 @@ function getBlocksFromProtocol( protocol: Protocol ){
             if ( blocks.find( block => block.id == rel.originActionId) == undefined ) {
 
                 if( rel.originActionId == startAction.id ){
-                    let beginningBlock: Block = Object.assign(new Block(), { id: rel.originActionId, gridX: 0, gridY: 0, action: startAction } )
+                    let beginningBlock: Block = Object.assign(new Block(new Point(0,0)), { id: rel.originActionId, action: startAction } )
                     blocks.push(beginningBlock)
                 }
 
@@ -130,11 +129,17 @@ function getBlocksFromProtocol( protocol: Protocol ){
 
                 let originBlock: Block = blocks.find( block => block.id == rel.originActionId )!;
                 let targetAction: Action = protocol.actions!.find( action => action.id == rel.targetActionId )!;
+                let newBlockGridX = 0
+                let newBlockGridY = originBlock.center!.y + 1;
 
-                let newBlockGridX = originBlock.gridX + ( originBlock.action?.type != 'decision'  ? 0 : 1 ); //TODO: "sempre indo para direita no gráfico"
-                let newBlockGridY = originBlock.gridY + 1;
+                if (originBlock.action?.type != 'decision') {
+                    newBlockGridX = originBlock.center!.x
+                } else {
+                    if ( rel.rule == 'yes') newBlockGridX = originBlock.center!.x + 1
+                    if ( rel.rule == 'no') newBlockGridX = originBlock.center!.x - 1
+                }
 
-                let newBlock: Block = Object.assign( new Block(), { id: rel.targetActionId, gridX: newBlockGridX, gridY: newBlockGridY,action: targetAction });
+                let newBlock: Block = Object.assign( new Block( new Point(newBlockGridX,newBlockGridY ) ), { id: rel.targetActionId, gridX: newBlockGridX, gridY: newBlockGridY,action: targetAction });
                 blocks.push(newBlock);
             }
            

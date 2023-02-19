@@ -24,8 +24,8 @@ export default class FlowChart {
         let minGridXValue = 0;
         let maxGridXValue = 0;
         this.blocks.forEach( block => { 
-            maxGridXValue = block.gridX > maxGridXValue ? block.gridX : maxGridXValue
-            minGridXValue = block.gridX < minGridXValue ? block.gridX : minGridXValue
+            maxGridXValue = block.center!.x > maxGridXValue ? block.center!.x : maxGridXValue
+            minGridXValue = block.center!.x < minGridXValue ? block.center!.x : minGridXValue
         })
         return ( Math.abs(maxGridXValue) + Math.abs(minGridXValue) + 1 )
     }

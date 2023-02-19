@@ -6,12 +6,14 @@ import { Home } from './pages/Home'
 import './index.css';
 import { ProtocoloX } from './pages/ProtocoloX';
 import { ExemplosBlocos } from './pages/ExemplosBlocos';
+import { ExemploProtocolo } from './pages/ExemploProtocolo';
 
 
 const router = createBrowserRouter([ 
   {path:'/', element: <Home />},
   {path:'/protocoloX', element: <ProtocoloX />},
-  {path:'/ExemplosBlocos', element: <ExemplosBlocos />}
+  {path:'/ExemplosBlocos', element: <ExemplosBlocos />},
+  {path:'/ExemploProtocolo', element: <ExemploProtocolo />}
 ]) 
 
 /* Let's KIS */

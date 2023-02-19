@@ -1,0 +1,55 @@
+id: 0
+metadata:
+  title: "Protocolo da sede com decisão."
+  description: "Protocolo de ação para quando o paciênte estiver com sede."
+  autor: "Joao Araujo"
+  reference: "Não há referência anexada."
+actions:
+  - id: 0
+    description: "A"
+    reference: null
+    type: beginning 
+  - id: 1
+    description: "B"
+    reference: null
+    type: simple 
+  - id: 2
+    description: "C"
+    reference: null
+    type: decision
+  - id: 3
+    description: "D"
+    reference: null
+    type: simples
+  - id: 4
+    description: "E"
+    reference: null
+    type: decision
+  - id: 5
+    description: "F"
+    reference: null
+    type: simple
+  - id: 6
+    description: "G"
+    reference: null
+    type: simple
+
+relationships:
+  - originActionId: 0
+    targetActionId: 1
+    rule: ''
+  - originActionId: 1
+    targetActionId: 2
+    rule: ''
+  - originActionId: 2
+    targetActionId: 3
+    rule: 'yes'
+  - originActionId: 2
+    targetActionId: 4
+    rule: 'no'
+  - originActionId: 4
+    targetActionId: 5
+    rule: 'yes'
+  - originActionId: 4
+    targetActionId: 6
+    rule: 'no'
