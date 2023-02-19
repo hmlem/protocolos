@@ -30,4 +30,8 @@ export default class FlowChart {
         return ( Math.abs(maxGridXValue) + Math.abs(minGridXValue) + 1 )
     }
 
+    draw(){
+        return (<div></div>)
+    }
+
 }

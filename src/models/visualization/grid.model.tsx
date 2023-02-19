@@ -15,4 +15,8 @@ export default class Grid {
 
     }
 
+    draw() {
+        
+    }
+
 }
