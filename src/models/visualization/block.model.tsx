@@ -39,7 +39,9 @@ export default class Block {
     safeboxWidth?: number
     safeboxHeight?: number
 
-    blockStyle = { fill:'#9edb7d', stroke: '#478724', borderRadius:'30', rx: '10', ry:'10'};
+    //TODO: gradientes nos backgrounds
+    simpleActionBlockStyle = { fill:'#9edb7d', stroke: '#478724', borderRadius:'30', rx: '10', ry:'10'};
+    decisionActionBlockStyle = { fill:'#A32C2C', stroke: '#A32C2C', borderRadius:'30', rx: '10', ry:'10'};
     safeboxStyle = { fillOpacity:'0.1', stroke: '#478724', strokeDasharray: '5,5' };
     yellowPointStyle = { fill:'#fcf758', stroke: '#fc8458' };
 
@@ -49,7 +51,7 @@ export default class Block {
         //TODO:
         // Define a largura e altura baseadas na quantidade de texto dentro da ação.
         this.width = 350;
-        this.height = 400;
+        this.height = 330;
 
         // TODO:
         // Definido a partir do tamanho do texto.
@@ -76,14 +78,30 @@ export default class Block {
     isTheFirstBlock = () => this.id == 0
 
     draw() {
-        return ( 
+        let blockType = 'decision'
+        if ( blockType == 'simple' ) return ( 
             <g key={`block-${this.id}-text-container`}>
-                <rect key={`${this.id}`} x={this.topLeft!.x} y={this.topLeft!.y} width={this.width} height={this.height} style={this.blockStyle} />
+                <rect key={`${this.id}`} x={this.topLeft!.x} y={this.topLeft!.y} width={this.width} height={this.height} style={this.simpleActionBlockStyle} />
                 <foreignObject key={`block-${this.id}-text`} x={this.topLeft!.x} y={this.topLeft!.y} width={this.width} height={this.height} >
                     {this.insertText()}
                 </foreignObject>
             </g>
-         )
+        )
+        let A = new Point(this.left!.x, this.center!.y );
+        let B = new Point(this.center!.x - this.width!/4, this.top!.y);
+        let C = new Point(this.center!.x + this.width!/4, this.top!.y);
+        let D = new Point(this.right!.x, this.center!.y);
+        let E = new Point(this.center!.x + this.width!/4, this.bottom!.y)
+        let F = new Point(this.center!.x - this.width!/4, this.bottom!.y)
+
+        if (blockType = 'decision') return ( 
+            <g key={`block-${this.id}-text-container`}>
+                <polygon points={` ${A.x},${A.y} ${B.x},${B.y} ${C.x},${C.y} ${D.x},${D.y} ${E.x},${E.y} ${F.x},${F.y}`} style={this.decisionActionBlockStyle} />
+                <foreignObject key={`block-${this.id}-text`} x={this.topLeft!.x} y={this.topLeft!.y} width={this.width} height={this.height} >
+                    {this.insertText()}
+                </foreignObject>
+            </g>
+            )
     }
 
     insertText() {
