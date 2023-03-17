@@ -1,5 +1,7 @@
-import { ActionType } from "../enums/EActionType"
+import Block from "../visualization/block.model"
+import { Point } from "../visualization/point.model"
 import Action from "./action.model"
+import { ProtocolMetadata } from "./protocolMetadata.model"
 import Relationship from "./relationship.model"
 
 export default class Protocol {
@@ -11,31 +13,27 @@ export default class Protocol {
 
     constructor() { }
 
-    /**
-     * O número de linhas é obitido pela quantidade de parentes únicos nas relações.
-     * Por exemplo: se a Action B, vem de A e vai para C sabemos que há 3 linhas no gráfico.
-     * @returns Número de Linhas de um gráfico de fluxo. 
-     */
-    getNumberOfRows() : number {
-        return 1;
+    getBlocks() : Block[] {
+        
+        let blocks : Block[] = []
+    
+        this.relationships?.forEach( relationship => {
+
+            let originAction : Action
+            let targetAction : Action
+
+            originAction = this.actions?.find( action => action.id == relationship.originActionId )!
+            targetAction = this.actions?.find( action => action.id == relationship.targetActionId )!
+
+            let originBlockCenterPoint = new Point(0,0)
+            let targetOptionCenterPoint = new Point(0,0)
+
+            
+            
+
+        })
+
+        return blocks;
     }
 
-    /**
-     * //TODO
-     */
-    getNumberOfColumns() : number {
-        return 1;
-    }
-
-    getStartAction(): Action { 
-        return new Action()
-     }
-
-}
-
-class ProtocolMetadata {
-    title?: string
-    description?:string
-    author?:string
-    reference?: string
 }

@@ -7,15 +7,15 @@ export function ExemplosBlocos() {
     let flowchartWidth: number = 750;
     let flowchartHeight: number = 600;
 
-    let blocks = [new Block( new Point(flowchartWidth/2, 300 ) )];
+    // let blocks = [new Block( new Point(flowchartWidth/2, 300 ) )];
 
     return ( 
     <div className="flex justify-center">
         
         <svg width={flowchartWidth} height={flowchartHeight} className="border-4 border-slate-600">
-            { blocks.map( block => block.draw() ) }
+            {/* { blocks.map( block => block.draw() ) }
             { blocks.map( block => block.drawSafebox() ) }
-            { blocks.map( block => block.drawConnectionPoints() ) }
+            { blocks.map( block => block.drawConnectionPoints() ) } */}
         </svg>
 
     </div>

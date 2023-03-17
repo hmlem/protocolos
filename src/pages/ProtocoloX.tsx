@@ -118,7 +118,7 @@ function getBlocksFromProtocol( protocol: Protocol ){
             if ( blocks.find( block => block.id == rel.originActionId) == undefined ) {
 
                 if( rel.originActionId == startAction.id ){
-                    let beginningBlock: Block = Object.assign(new Block(new Point(0,0)), { id: rel.originActionId, action: startAction } )
+                    let beginningBlock: Block = Object.assign(new Block(new Point(0,0), new Action()), { id: rel.originActionId, action: startAction } )
                     blocks.push(beginningBlock)
                 }
 
@@ -139,7 +139,7 @@ function getBlocksFromProtocol( protocol: Protocol ){
                     if ( rel.rule == 'no') newBlockGridX = originBlock.center!.x - 1
                 }
 
-                let newBlock: Block = Object.assign( new Block( new Point(newBlockGridX,newBlockGridY ) ), { id: rel.targetActionId, gridX: newBlockGridX, gridY: newBlockGridY,action: targetAction });
+                let newBlock: Block = Object.assign( new Block( new Point(newBlockGridX,newBlockGridY ), new Action() ), { id: rel.targetActionId, gridX: newBlockGridX, gridY: newBlockGridY,action: targetAction });
                 blocks.push(newBlock);
             }
            

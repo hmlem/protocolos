@@ -1,5 +1,8 @@
+//TODO: parar de usar paths relativos
 import Action from "../data/action.model"
 import { Point } from "./point.model"
+import { decisionActionBlockStyle, safeboxStyle, simpleActionBlockStyle, yellowPointStyle } from "../../utils/blockStyles";
+
 
 export default class Block {
 
@@ -39,14 +42,9 @@ export default class Block {
     safeboxWidth?: number
     safeboxHeight?: number
 
-    //TODO: gradientes nos backgrounds
-    simpleActionBlockStyle = { fill:'#9edb7d', stroke: '#478724', borderRadius:'30', rx: '10', ry:'10'};
-    decisionActionBlockStyle = { fill:'#A32C2C', stroke: '#A32C2C', borderRadius:'30', rx: '10', ry:'10'};
-    safeboxStyle = { fillOpacity:'0.1', stroke: '#478724', strokeDasharray: '5,5' };
-    yellowPointStyle = { fill:'#fcf758', stroke: '#fc8458' };
+    constructor( centerPoint: Point, action: Action ) {
 
-
-    constructor( centerPoint : Point,  ) {
+        this.action = action
 
         //TODO:
         // Define a largura e altura baseadas na quantidade de texto dentro da ação.
@@ -69,39 +67,20 @@ export default class Block {
         this.bottom = new Point( this.center.x, this.center.y + this.height/2 );
 
         this.safeboxWidth = this.width + this.hMargin * 2;
-        this.safeboxHeight = this.height + this.vMargin*2;
+        this.safeboxHeight = this.height + this.vMargin * 2;
         this.safeboxCenter = new Point( this.center.x - this.width/2 - this.hMargin, this.center.y - this.height/2 - this.vMargin )
 
     }
 
-    // TODO:  isRoot fica mais charmoso
-    isTheFirstBlock = () => this.id == 0
+    // TODO: isRoot fica mais charmoso
+    isRoot = () => (this.id == 0)
 
     draw() {
-        let blockType = 'decision'
-        if ( blockType == 'simple' ) return ( 
-            <g key={`block-${this.id}-text-container`}>
-                <rect key={`${this.id}`} x={this.topLeft!.x} y={this.topLeft!.y} width={this.width} height={this.height} style={this.simpleActionBlockStyle} />
-                <foreignObject key={`block-${this.id}-text`} x={this.topLeft!.x} y={this.topLeft!.y} width={this.width} height={this.height} >
-                    {this.insertText()}
-                </foreignObject>
-            </g>
-        )
-        let A = new Point(this.left!.x, this.center!.y );
-        let B = new Point(this.center!.x - this.width!/4, this.top!.y);
-        let C = new Point(this.center!.x + this.width!/4, this.top!.y);
-        let D = new Point(this.right!.x, this.center!.y);
-        let E = new Point(this.center!.x + this.width!/4, this.bottom!.y)
-        let F = new Point(this.center!.x - this.width!/4, this.bottom!.y)
-
-        if (blockType = 'decision') return ( 
-            <g key={`block-${this.id}-text-container`}>
-                <polygon points={` ${A.x},${A.y} ${B.x},${B.y} ${C.x},${C.y} ${D.x},${D.y} ${E.x},${E.y} ${F.x},${F.y}`} style={this.decisionActionBlockStyle} />
-                <foreignObject key={`block-${this.id}-text`} x={this.topLeft!.x} y={this.topLeft!.y} width={this.width} height={this.height} >
-                    {this.insertText()}
-                </foreignObject>
-            </g>
-            )
+        switch (this.action?.type) {
+            case "simple": return this.drawSimpleActionBlock()
+            case "decision": return this.drawDecisionActionBlock()
+            default: console.error( "Tipo de bloco não implementado." )
+        }
     }
 
     insertText() {
@@ -117,17 +96,46 @@ export default class Block {
         )
     }
 
+    drawSimpleActionBlock = () => ( 
+        <g key={`block-${this.id}-text-container`}>
+            <rect key={`${this.id}`} x={this.topLeft!.x} y={this.topLeft!.y} width={this.width} height={this.height} style={simpleActionBlockStyle} />
+            <foreignObject key={`block-${this.id}-text`} x={this.topLeft!.x} y={this.topLeft!.y} width={this.width} height={this.height} >
+                {this.insertText()}
+            </foreignObject>
+        </g>
+    )
+
+    drawDecisionActionBlock = () => {
+       
+        let A = new Point(this.left!.x, this.center!.y );
+        let B = new Point(this.center!.x - this.width!/4, this.top!.y);
+        let C = new Point(this.center!.x + this.width!/4, this.top!.y);
+        let D = new Point(this.right!.x, this.center!.y);
+        let E = new Point(this.center!.x + this.width!/4, this.bottom!.y)
+        let F = new Point(this.center!.x - this.width!/4, this.bottom!.y)
+
+        return (
+        <g key={`block-${this.id}-text-container`}>
+            <polygon points={` ${A.x},${A.y} ${B.x},${B.y} ${C.x},${C.y} ${D.x},${D.y} ${E.x},${E.y} ${F.x},${F.y}`} style={decisionActionBlockStyle} />
+            <foreignObject key={`block-${this.id}-text`} x={this.topLeft!.x} y={this.topLeft!.y} width={this.width} height={this.height} >
+                {this.insertText()}
+            </foreignObject>
+        </g>
+        )
+
+    }
+
     drawSafebox() {
-        return <rect key={`safebox-${this.id}`} x={this.safeboxCenter!.x} y={this.safeboxCenter!.y} width={this.safeboxWidth} height={this.safeboxHeight} style={this.safeboxStyle} />
+        return <rect key={`safebox-${this.id}`} x={this.safeboxCenter!.x} y={this.safeboxCenter!.y} width={this.safeboxWidth} height={this.safeboxHeight} style={safeboxStyle} />
     }
 
     drawConnectionPoints() {
         return ( 
         <g key={`connectection-points-${this.id}`}>
-            <circle key={`connectection-point-top-${this.id}`} cx={this.top!.x} cy={this.top!.y} r={5} style={this.yellowPointStyle} />
-            <circle key={`connectection-point-left-${this.id}`} cx={this.left!.x} cy={this.left!.y} r={5} style={this.yellowPointStyle} />
-            <circle key={`connectection-point-right-${this.id}`} cx={this.right!.x} cy={this.right!.y} r={5} style={this.yellowPointStyle} />
-            <circle key={`connectection-point-bottom-${this.id}`} cx={this.bottom!.x} cy={this.bottom!.y} r={5} style={this.yellowPointStyle} />
+            <circle key={`connectection-point-top-${this.id}`} cx={this.top!.x} cy={this.top!.y} r={5} style={yellowPointStyle} />
+            <circle key={`connectection-point-left-${this.id}`} cx={this.left!.x} cy={this.left!.y} r={5} style={yellowPointStyle} />
+            <circle key={`connectection-point-right-${this.id}`} cx={this.right!.x} cy={this.right!.y} r={5} style={yellowPointStyle} />
+            <circle key={`connectection-point-bottom-${this.id}`} cx={this.bottom!.x} cy={this.bottom!.y} r={5} style={yellowPointStyle} />
         </g>
         )
     }

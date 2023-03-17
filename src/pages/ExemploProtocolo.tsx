@@ -57,50 +57,9 @@ export function ExemploProtocolo(){
 function getBlocksFromProtocol( protocol: Protocol ){
     
     let blocks : Block[] = []
+
     
-    let startAction: Action = Object.assign(new Action(), protocol.actions?.filter( a => a.id == 0 )[0]!);// TODO: necessita que o primeiro, inicio do protocolo, seja com id 0. talvez mudar depois.
+    
+    return blocks;
 
-        // Para cada relação, o algoritimo vai pegar a origem e o destino e
-        // vai transformar em blocos. Se um deles for origem, vai receber 0,0
-
-        protocol.relationships?.forEach( rel => {
-
-            // Verifica se já não há bloco com o id da ação de origem da relação.
-            if ( blocks.find( block => block.id == rel.originActionId) == undefined ) {
-
-                if( rel.originActionId == startAction.id ){
-                    let beginningBlock: Block = Object.assign(new Block(new Point(0,0)), { id: rel.originActionId, action: startAction } )
-                    blocks.push(beginningBlock)
-                }
-
-            }
-
-            // verifica se o bloco do destino da relação já não está no array de blocos
-            if( blocks.filter( b => b.id == rel.targetActionId ).length == 0 ) {
-
-                let originBlock: Block = blocks.find( block => block.id == rel.originActionId )!;
-                let targetAction: Action = protocol.actions!.find( action => action.id == rel.targetActionId )!;
-                let newBlockGridX = 0
-                let newBlockGridY = originBlock.center!.y + 1;
-
-                if (originBlock.action?.type != 'decision') {
-                    newBlockGridX = originBlock.center!.x
-                } else {
-                    if ( rel.rule == 'yes') newBlockGridX = originBlock.center!.x + 1
-                    if ( rel.rule == 'no') newBlockGridX = originBlock.center!.x - 1
-                }
-
-                let newBlock: Block = Object.assign( new Block( new Point(newBlockGridX,newBlockGridY ) ), { id: rel.targetActionId, gridX: newBlockGridX, gridY: newBlockGridY,action: targetAction });
-                blocks.push(newBlock);
-            }
-           
-        });
-
-        // Positivar blocos com x negativo:
-        let minValue = 0
-        blocks.forEach( block => { minValue = block.center!.x < minValue ? block.center!.x : minValue })
-        let correction = Math.abs( minValue )
-        blocks.forEach( block => { block.center!.x += correction })
-
-        return blocks;
 }

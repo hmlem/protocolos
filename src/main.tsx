@@ -7,13 +7,15 @@ import './index.css';
 import { ProtocoloX } from './pages/ProtocoloX';
 import { ExemplosBlocos } from './pages/ExemplosBlocos';
 import { ExemploProtocolo } from './pages/ExemploProtocolo';
+import { TiposBlocos } from './pages/TiposBlocos';
 
 
 const router = createBrowserRouter([ 
   {path:'/', element: <Home />},
   {path:'/protocoloX', element: <ProtocoloX />},
   {path:'/ExemplosBlocos', element: <ExemplosBlocos />},
-  {path:'/ExemploProtocolo', element: <ExemploProtocolo />}
+  {path:'/ExemploProtocolo', element: <ExemploProtocolo />},
+  {path:'/TiposBlocos', element: <TiposBlocos />}
 ]) 
 
 /* Let's KIS */
